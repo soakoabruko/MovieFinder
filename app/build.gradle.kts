@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -15,6 +17,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProperties = Properties() // класс для работы с файлами формата key=value
+        val localFile = rootProject.file("local.properties")
+
+        localProperties.load(localFile.inputStream())
+
+        val apiKey = localProperties.getProperty("API_KEY")
+
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -30,6 +41,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true // генерация класса BuildConfig
     }
 }
 
