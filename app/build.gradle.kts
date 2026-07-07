@@ -11,20 +11,23 @@ android {
 
     defaultConfig {
         applicationId = "com.team.moviefinder"
-        minSdk = 26 // минимальная версия ОС
+        // минимальная версия ОС
+        minSdk = 26
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val localProperties = Properties() // класс для работы с файлами формата key=value
+        // класс для работы с файлами формата key=value
+        val localProperties = Properties()
         val localFile = rootProject.file("local.properties")
 
         localProperties.load(localFile.inputStream())
 
         val apiKey = localProperties.getProperty("API_KEY")
 
+        buildConfigField("String", "BASE_URL", "\"https://kinopoiskapiunofficial.tech/\"")
         buildConfigField("String", "API_KEY", "\"$apiKey\"")
     }
 
@@ -41,7 +44,8 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true // генерация класса BuildConfig
+        // генерация класса BuildConfig
+        buildConfig = true
     }
 }
 
@@ -49,7 +53,8 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
 
-    implementation(libs.androidx.navigation.compose) // navigation compose
+    // navigation compose
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
