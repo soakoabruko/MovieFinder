@@ -1,25 +1,34 @@
 package com.team.moviefinder.data.repository
 
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class MovieFinderApiViewModel(): ViewModel() {
-    private val internalState: MutableState<UiState<Any>> = mutableStateOf(UiState.Loading)
-    val uiState: State<UiState<Any>> = internalState
+class MovieFinderApiViewModel: ViewModel() {
+    private val _state = mutableStateOf(MovieScreenState())
+    val state: State<MovieScreenState> = _state
 
     fun getMovieById(id: Int) {
         viewModelScope.launch {
-            internalState.value = UiState.Loading
+            _state.value = _state.value.copy(
+                isLoading = true,
+                error = null
+            )
 
             try {
-                val movie = MovieFinderApiRepository.getMovieById(id)
-                internalState.value = UiState.Success(movie)
+                val response = MovieFinderApiRepository.getMovieById(id)
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    selectedMovie = response,
+                    error = null
+                )
             } catch (e: Exception) {
-                internalState.value = UiState.Error("Failed to load: ${e.message}")
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    error = e.message
+                )
             }
         }
     }
@@ -29,13 +38,23 @@ class MovieFinderApiViewModel(): ViewModel() {
         page: Int = 1,
     ) {
         viewModelScope.launch {
-            internalState.value = UiState.Loading
+            _state.value = _state.value.copy(
+                isLoading = true,
+                error = null
+            )
 
             try {
-                val movieResponse = MovieFinderApiRepository.searchMovieByKeywordAndPage(keyword, page)
-                internalState.value = UiState.Success(movieResponse)
+                val response = MovieFinderApiRepository.searchMovieByKeywordAndPage(keyword, page)
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    searchResult = response,
+                    error = null
+                )
             } catch (e: Exception) {
-                internalState.value = UiState.Error("Failed to load: ${e.message}")
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    error = e.message
+                )
             }
         }
     }

@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import com.team.moviefinder.data.repository.MovieFinderApiViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
-import com.team.moviefinder.data.repository.UiState
 import androidx.compose.material3.Text
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +25,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Scaffold(
-                content = { padding: PaddingValues -> // расположение под status bar-ом
+                // расположение под status bar-ом
+                content = { padding: PaddingValues ->
                     Column(
                         modifier = Modifier
                             .background(Color.DarkGray)
@@ -34,9 +35,9 @@ class MainActivity : ComponentActivity() {
                         ,
                     ) {
                         // содержимое приложения
-                        // TestMovieScreen()
+                        TestMovieScreen()
 
-                        TestMovieResponseScreen()
+                        // TestMovieResponseScreen()
                     }
                 }
             )
@@ -44,22 +45,22 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// примеры использования api (можно удалить)
-
 @Composable
 fun TestMovieScreen(
     vm: MovieFinderApiViewModel = viewModel()
 ) {
-    LaunchedEffect(Unit) { // корутина при первом вызове TestScreen
-        vm.getMovieById(263531)
+    val state by vm.state
+
+    LaunchedEffect(Unit) {
+        vm.getMovieById(84049)
     }
 
-    val uiState = vm.uiState.value
-
-    when (uiState) {
-        is UiState.Loading -> Text("Загрузка")
-        is UiState.Success -> Text(uiState.data.toString())
-        is UiState.Error -> Text(uiState.message)
+    if (state.isLoading) {
+        Text("Загрузка")
+    } else if (state.error != null) {
+        Text("Failed to load: ${state.error}")
+    } else if (state.selectedMovie != null) {
+        Text(state.selectedMovie.toString())
     }
 }
 
@@ -67,15 +68,17 @@ fun TestMovieScreen(
 fun TestMovieResponseScreen(
     vm: MovieFinderApiViewModel = viewModel()
 ) {
+    val state by vm.state
+
     LaunchedEffect(Unit) {
-        vm.searchMovieByKeyword("Мстители")
+        vm.searchMovieByKeyword("Рапунцель")
     }
 
-    val uiState = vm.uiState.value
-
-    when (uiState) {
-        is UiState.Loading -> Text("Загрузка")
-        is UiState.Success -> Text(uiState.data.toString())
-        is UiState.Error -> Text(uiState.message)
+    if (state.isLoading) {
+        Text("Загрузка")
+    } else if (state.error != null) {
+        Text("Failed to load: ${state.error}")
+    } else if (state.searchResult != null) {
+        Text(state.searchResult.toString())
     }
 }
