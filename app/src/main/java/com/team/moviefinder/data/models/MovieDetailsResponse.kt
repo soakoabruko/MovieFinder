@@ -21,8 +21,8 @@ data class MovieDetailsResponse(
     val nameEn: String?,
     @SerializedName("posterUrl")
     val posterUrl: String,
-    @SerializedName("ratingKinopoisk")
-    val rating: Float?,
+    @SerializedName("rating") // !!! не Double, а String приходит с API
+    val rating: String? = null,
     @SerializedName("description")
     val description: String?,
 )

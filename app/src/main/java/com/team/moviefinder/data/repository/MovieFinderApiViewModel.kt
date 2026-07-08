@@ -32,7 +32,6 @@ class MovieFinderApiViewModel: ViewModel() {
             }
         }
     }
-
     fun searchMovieByKeyword(
         keyword: String,
         page: Int = 1,

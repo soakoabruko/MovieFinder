@@ -35,4 +35,7 @@ data class MovieSearchItemResponse (
     val nameEn: String,
     @SerializedName("posterUrl")
     val posterUrl: String,
+
+    @SerializedName("rating")
+    val rating: String? = null, // !!! не Double, а String приходит с API
 )
