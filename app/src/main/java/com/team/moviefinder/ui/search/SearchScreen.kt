@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import com.team.moviefinder.data.models.MovieSearchItemResponse
 
 // иконки material design
 import androidx.compose.material.icons.Icons
@@ -325,7 +326,7 @@ fun SearchScreen(
  */
 @Composable
 fun MovieCard(
-    movie: com.team.moviefinder.data.models.MovieSearchItemResponse,
+    movie: MovieSearchItemResponse,
     onClick: () -> Unit
 ) {
     val displayTitle = movie.nameRu ?: movie.nameEn ?: "Без названия"

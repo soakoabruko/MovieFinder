@@ -3,6 +3,7 @@ package com.team.moviefinder.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.team.moviefinder.data.models.MovieSearchResponse
+import com.team.moviefinder.data.models.MovieSearchItemResponse
 import com.team.moviefinder.data.repository.MovieFinderApiRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +29,7 @@ class SearchViewModel : ViewModel() {
     private var currentPage = 1
     private var currentQuery = ""
     private var totalFilms = 0
-    private val allFilms = mutableListOf<com.team.moviefinder.data.models.MovieSearchItemResponse>()
+    private val allFilms = mutableListOf<MovieSearchItemResponse>()
 
     // поиск фильмов по переданным данным
     fun searchMovies(query: String) {
