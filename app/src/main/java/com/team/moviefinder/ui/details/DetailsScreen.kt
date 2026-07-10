@@ -11,9 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.team.moviefinder.R
 import com.team.moviefinder.data.models.MovieDetailsResponse
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,10 +34,10 @@ fun DetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Детали фильма") },
+                title = { Text(stringResource(R.string.details_title)) },
                 navigationIcon = {
                     TextButton(onClick = onNavigateBack) {
-                        Text("< Назад")
+                        Text(stringResource(R.string.back_button))
                     }
                 }
             )
@@ -53,7 +55,7 @@ fun DetailsScreen(
                 }
                 is DetailsUiState.Error -> {
                     Text(
-                        text = "Ошибка: ${state.message}\nПроверьте API ключ и интернет!",
+                        text = stringResource(R.string.error_message, state.message),
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -77,7 +79,7 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
     ) {
         AsyncImage(
             model = movie.posterUrl,
-            contentDescription = "Постер фильма",
+            contentDescription = stringResource(R.string.movie_poster),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
@@ -87,7 +89,7 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Название (предпочитаем русское, если нет - английское)
-        val title = movie.nameRu ?: movie.nameEn ?: "Без названия"
+        val title = movie.nameRu ?: movie.nameEn ?: stringResource(R.string.untitled_movie)
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
@@ -97,9 +99,9 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
         Spacer(modifier = Modifier.height(8.dp))
 
         // Рейтинг
-        val ratingText = movie.rating?.toString() ?: "Нет оценки"
+        val ratingText = movie.rating?.toString() ?: stringResource(R.string.no_rating)
         Text(
-            text = "Рейтинг: $ratingText",
+            text = stringResource(R.string.rating_text, ratingText),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -108,7 +110,7 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
 
         // Описание
         Text(
-            text = movie.description ?: "Описание отсутствует.",
+            text = movie.description ?: stringResource(R.string.no_description),
             style = MaterialTheme.typography.bodyLarge
         )
     }
