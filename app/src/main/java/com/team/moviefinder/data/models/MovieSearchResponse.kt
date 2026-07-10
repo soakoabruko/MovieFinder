@@ -25,6 +25,7 @@ data class MovieSearchResponse (
  * @property nameRu Название фильма на русском языке.
  * @property nameEn Название фильма на английском языке.
  * @property posterUrl URL-адрес постера фильма.
+ * @property rating Рейтинг фильма на Кинопоиске.
  */
 data class MovieSearchItemResponse (
     @SerializedName("filmId")
@@ -35,4 +36,6 @@ data class MovieSearchItemResponse (
     val nameEn: String,
     @SerializedName("posterUrl")
     val posterUrl: String,
+    @SerializedName("rating")
+    val rating: String,
 )
