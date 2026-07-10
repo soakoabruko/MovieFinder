@@ -6,9 +6,9 @@ import androidx.compose.runtime.State
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class MovieFinderApiViewModel: ViewModel() {
-    private val _state = mutableStateOf(MovieScreenState())
-    val state: State<MovieScreenState> = _state
+class TestViewModel: ViewModel() {
+    private val _state = mutableStateOf(TestScreenState())
+    val state: State<TestScreenState> = _state
 
     fun getMovieById(id: Int) {
         viewModelScope.launch {

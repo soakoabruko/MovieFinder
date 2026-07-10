@@ -63,6 +63,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // доп иконки
+    implementation(libs.androidx.compose.material.icons.extended)
+
     // retrofit
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.converter.gson)
@@ -77,8 +80,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
-
-    // дополнительные иконки
-    implementation("androidx.compose.material:material-icons-extended")
-
 }

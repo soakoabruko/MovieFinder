@@ -3,7 +3,7 @@ package com.team.moviefinder.data.repository
 import com.team.moviefinder.data.models.MovieSearchResponse
 import com.team.moviefinder.data.models.MovieDetailsResponse
 
-data class MovieScreenState (
+data class TestScreenState (
     val isLoading: Boolean = false,
     val searchResult: MovieSearchResponse? = null,
     val selectedMovie: MovieDetailsResponse? = null,

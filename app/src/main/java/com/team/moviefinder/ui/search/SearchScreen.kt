@@ -14,7 +14,7 @@ import com.team.moviefinder.data.models.MovieSearchItemResponse
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 
-// работа с сотсоянием и жизненным циклом
+// работа с состоянием и жизненным циклом
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,10 +32,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
-// загрузка изображений (Coil)
+// загрузка изображений
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.material.icons.filled.ArrowForward
+import com.team.moviefinder.ui.theme.LightBlue
 
 /**
  * Экран поиска фильмов
@@ -51,273 +52,297 @@ import androidx.compose.material.icons.filled.ArrowForward
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    navController: NavController,
-    viewModel: SearchViewModel = viewModel()
+    // navController: NavController,
+    vm: SearchViewModel = viewModel(),
 ) {
     var query by remember { mutableStateOf("") }
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by vm.uiState.collectAsState()
     val colorScheme = MaterialTheme.colorScheme
 
-    // каркас экрана (Scaffold)
     Scaffold(
-        // верхняя панель
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Что ты хочешь посмотреть?",
+                        color = colorScheme.onSurface,  // цвет из темы
                         fontWeight = FontWeight.SemiBold,
-                        color = colorScheme.onSurface  // цвет из темы
                     )
                 },
                 // кнопка "Назад" для возврата на предыдущий экран
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { /* navController.navigateUp() */ }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Назад",
-                            tint = colorScheme.onSurface  // цвет из темы
+                            tint = colorScheme.onSurface,  // цвет из темы
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = colorScheme.surface  // цвет из темы
-                )
+                    containerColor = colorScheme.surface,  // цвет из темы
+                ),
             )
         },
-        // нижняя панель навигации
         bottomBar = {
             NavigationBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(78.dp),
                 containerColor = colorScheme.surface,  // цвет из темы
-                tonalElevation = 0.dp
-            ) {
-                // Home
-                NavigationBarItem(
-                    icon = { Icon(Icons.Filled.Home, contentDescription = "Главная") },
-                    label = { Text("Главная") },
-                    selected = false,
-                    onClick = { /* Заглушка */ },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF0296E5),
-                        selectedTextColor = Color(0xFF0296E5),
-                        unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                        unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                        indicatorColor = Color.Transparent
+                tonalElevation = 0.dp,
+                content = {
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Home,
+                                contentDescription = "Главная",
+                            )
+                        },
+                        label = {
+                            Text("Главная")
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = LightBlue,
+                            selectedTextColor = LightBlue,
+                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                            indicatorColor = Color.Transparent
+                        )
                     )
-                )
 
-                // Search (активная)
-                NavigationBarItem(
-                    icon = { Icon(Icons.Filled.Search, contentDescription = "Поиск") },
-                    label = { Text("Поиск") },
-                    selected = true,
-                    onClick = { /* Заглушка */ },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF0296E5),
-                        selectedTextColor = Color(0xFF0296E5),
-                        unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                        unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                        indicatorColor = Color.Transparent
+                    NavigationBarItem(
+                        selected = true,
+                        onClick = {},
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Search,
+                                contentDescription = "Поиск"
+                            )
+                        },
+                        label = {
+                            Text("Поиск")
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = LightBlue,
+                            selectedTextColor = LightBlue,
+                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                            indicatorColor = Color.Transparent
+                        )
                     )
-                )
 
-                // Settings
-                NavigationBarItem(
-                    icon = { Icon(Icons.Filled.Settings, contentDescription = "Настройки") },
-                    label = { Text("Настройки") },
-                    selected = false,
-                    onClick = { /* Заглушка */ },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF0296E5),
-                        selectedTextColor = Color(0xFF0296E5),
-                        unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                        unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                        indicatorColor = Color.Transparent
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = {},
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = "Настройки"
+                            )
+                        },
+                        label = {
+                            Text("Настройки")
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = LightBlue,
+                            selectedTextColor = LightBlue,
+                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                            indicatorColor = Color.Transparent
+                        )
                     )
-                )
-            }
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(vertical = 16.dp)
-        ) {
-            // поле ввода
-            OutlinedTextField(
-                value = query,
-                onValueChange = { query = it },
-                placeholder = {
-                    Text(
-                        "Поиск",
-                        color = colorScheme.onSurface.copy(alpha = 0.6f)  // цвет из темы
-                    )
-                },
+                }
+            )
+        },
+        content = { padding: PaddingValues ->
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = colorScheme.surfaceVariant,   // цвет из темы
-                    unfocusedContainerColor = colorScheme.surfaceVariant, // цвет из темы
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedPlaceholderColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                    unfocusedPlaceholderColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                    focusedTextColor = colorScheme.onSurface,  // цвет из темы
-                    unfocusedTextColor = colorScheme.onSurface, // цвет из темы
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                // поиск при нажатии enter на клавиатуре
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        if (query.isNotBlank()) {
-                            viewModel.searchMovies(query)
-                        }
-                    }
-                ),
-                // кнопка "Очистить"
-                trailingIcon = {
-                    Row {
-                        if (query.isNotEmpty()) {
-                            IconButton(onClick = { query = "" }) {
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(vertical = 16.dp)
+            ) {
+                // поле ввода
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = { query = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    placeholder = {
+                        Text(
+                            text = "Поиск",
+                            color = colorScheme.onSurface.copy(alpha = 0.6f),  // цвет из темы
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    // поиск при нажатии enter на клавиатуре
+                    keyboardActions = KeyboardActions(onSearch = { vm.searchMovies(query) }),
+                    singleLine = true,
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = colorScheme.surfaceVariant,   // цвет из темы
+                        unfocusedContainerColor = colorScheme.surfaceVariant, // цвет из темы
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedPlaceholderColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                        unfocusedPlaceholderColor = colorScheme.onSurface.copy(alpha = 0.6f),
+                        focusedTextColor = colorScheme.onSurface,  // цвет из темы
+                        unfocusedTextColor = colorScheme.onSurface, // цвет из темы
+                    ),
+                    trailingIcon = {
+                        Row {
+                            if (query.isNotEmpty()) {
+                                IconButton(onClick = { query = "" }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Очистить",
+                                        tint = colorScheme.onSurface.copy(alpha = 0.6f),
+                                    )
+                                }
+                            }
+
+                            IconButton(onClick = { vm.searchMovies(query) }) {
                                 Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Очистить",
-                                    tint = colorScheme.onSurface.copy(alpha = 0.6f)
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "Поиск",
+                                    tint = LightBlue,
                                 )
                             }
                         }
-                        IconButton(
-                            onClick = {
-                                if (query.isNotBlank()) {
-                                    viewModel.searchMovies(query)
-                                }
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Box(modifier = Modifier.weight(1f)) {
+                    when (val currentState = uiState) {
+                        // состояние "Загрузка"
+                        is SearchUiState.Loading -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator()
                             }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "Поиск",
-                                tint = Color(0xFF0296E5)
-                            )
                         }
-                    }
-                }
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                        // состояние "Успех"
+                        is SearchUiState.Success -> {
+                            val total = currentState.totalFilms
+                            val films = currentState.allFilms
 
-            // контент
-            Box(modifier = Modifier.weight(1f)) {
-                when (val state = uiState) {
-                    // состояние "Загрузка"
-                    is SearchUiState.Loading -> {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                    // состояние "Успех"
-                    is SearchUiState.Success -> {
-                        val films = state.data.films
-                        val total = state.data.searchFilmsCountResult
-                        val isMoreAvailable = films.size < total
+                            val isMoreAvailable = films.size < total
 
-                        if (films.isEmpty()) {
-                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                Text("Ничего не найдено", color = colorScheme.onSurface)
-                            }
-                        } else {
                             Column {
-                                // счётчик найденных фильмов
+                                // кол-во найденных фильмов
                                 Text(
                                     text = "Найдено: $total фильмов",
-                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
                                     color = colorScheme.onSurface.copy(alpha = 0.6f),
-                                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp)
+                                    fontSize = 14.sp,
                                 )
                                 // список фильмов
                                 LazyColumn(
                                     modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                    verticalArrangement = Arrangement.spacedBy(12.dp),
                                 ) {
                                     items(films) { movie ->
-                                        MovieCard(movie = movie) {
-                                            println("Клик по фильму: ${movie.nameRu ?: movie.nameEn}")
-                                        }
+                                        MovieCard(
+                                            movie = movie,
+                                            onClick = {},
+                                        )
                                     }
 
                                     // кнопка "Загрузить ещё"
                                     if (isMoreAvailable) {
                                         item {
                                             Button(
-                                                onClick = { viewModel.loadMore() },
+                                                onClick = { vm.loadMore() },
                                                 modifier = Modifier
                                                     .fillMaxWidth()
-                                                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                                                    .padding(horizontal = 24.dp, vertical = 8.dp)
+                                                ,
                                                 colors = ButtonDefaults.buttonColors(
-                                                    containerColor = Color(0xFF0296E5)
-                                                )
+                                                    containerColor = LightBlue,
+                                                ),
                                             ) {
                                                 Text("Загрузить ещё")
                                             }
                                         }
                                     }
 
-                                    // сообщение о конце списка
-                                    if (!isMoreAvailable && films.size > 0) {
+                                    // конец
+                                    if (!isMoreAvailable) {
                                         item {
                                             Text(
                                                 text = "Все фильмы загружены",
-                                                fontSize = 14.sp,
-                                                color = colorScheme.onSurface.copy(alpha = 0.5f),
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .padding(16.dp)
+                                                ,
+                                                color = colorScheme.onSurface.copy(alpha = 0.5f),
+                                                fontSize = 14.sp,
                                             )
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    // состояние "Ошибка"
-                    is SearchUiState.Error -> {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("Ошибка: ${state.message}", color = colorScheme.error)
+
+                        // состояние "Ошибка"
+                        is SearchUiState.Error -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = currentState.message,
+                                    color = colorScheme.error,
+                                )
+                            }
                         }
-                    }
-                    // состояние "Пустой результат"
-                    is SearchUiState.Empty -> {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("Ничего не найдено", color = colorScheme.onSurface)
+
+                        // состояние "Пустой результат"
+                        is SearchUiState.Empty -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = "Ничего не найдено",
+                                    color = colorScheme.onSurface,
+                                )
+                            }
                         }
-                    }
-                    // состояние "Ожидание ввода"
-                    is SearchUiState.Idle -> {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("Введите название фильма", color = colorScheme.onSurface.copy(alpha = 0.6f))
+
+                        // состояние "Ожидание ввода"
+                        is SearchUiState.Idle -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = "Введите название фильма",
+                                    color = colorScheme.onSurface,
+                                )
+                            }
                         }
                     }
                 }
             }
         }
-    }
+    )
 }
-
-
-// карточка фильма (MovieCard)
 
 /**
  * Карточка с информацией о фильме
  *
  * Отображает:
  * - Постер фильма
- * - Название (русское и оригинальное)
+ * - Название (русское и английское)
  * - Рейтинг (со звездочкой)
  * - Стрелку для перехода к деталям
  *
@@ -327,7 +352,7 @@ fun SearchScreen(
 @Composable
 fun MovieCard(
     movie: MovieSearchItemResponse,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val displayTitle = movie.nameRu ?: movie.nameEn ?: "Без названия"
     val colorScheme = MaterialTheme.colorScheme
@@ -348,8 +373,9 @@ fun MovieCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(12.dp)
+            ,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             // постер
             AsyncImage(
@@ -357,11 +383,13 @@ fun MovieCard(
                     .data(movie.posterUrl)
                     .crossfade(true)
                     .diskCacheKey(movie.posterUrl)
-                    .build(),
+                    .build()
+                ,
                 contentDescription = displayTitle,
                 modifier = Modifier
                     .size(70.dp)
                     .clip(RoundedCornerShape(8.dp))
+                ,
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -370,48 +398,47 @@ fun MovieCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = displayTitle,
-                    fontWeight = FontWeight.Bold,
+                    color = colorScheme.onSurface,  // цвет из темы
                     fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    maxLines = 1,
+                    fontWeight = FontWeight.Bold,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                    color = colorScheme.onSurface  // цвет из темы
+                    maxLines = 1,
                 )
 
-                if (!movie.nameEn.isNullOrBlank() && movie.nameRu != null) {
+                if (!movie.nameEn.isNullOrBlank() && !movie.nameRu.isNullOrBlank()) {
                     Text(
                         text = movie.nameEn,
+                        color = colorScheme.onSurface.copy(alpha = 0.6f),
                         fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        color = colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 // рейтинг
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = null,
+                        contentDescription = "Рейтинг",
                         modifier = Modifier.size(16.dp),
-                        tint = Color(0xFFFFC107)
+                        tint = Color(0xFFFFC107),
                     )
+
                     Spacer(modifier = Modifier.width(4.dp))
+
                     Text(
-                        text = movie.rating ?: "нет рейтинга",
+                        text = if (movie.rating == "null") "Нет рейтинга" else movie.rating,
+                        color = colorScheme.onSurface.copy(alpha = 0.6f),
                         fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        color = colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
             }
 
-            // стрелка вправо
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Подробнее",
+                modifier = Modifier.size(24.dp),
                 tint = colorScheme.onSurface.copy(alpha = 0.4f),
-                modifier = Modifier.size(24.dp)
             )
         }
     }

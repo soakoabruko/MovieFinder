@@ -9,15 +9,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import com.team.moviefinder.data.repository.MovieFinderApiViewModel
+import com.team.moviefinder.data.repository.TestViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Text
+import com.team.moviefinder.ui.search.SearchScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +28,15 @@ class MainActivity : ComponentActivity() {
                 content = { padding: PaddingValues ->
                     Column(
                         modifier = Modifier
-                            .background(Color.DarkGray)
                             .fillMaxSize()
                             .padding(padding),
                     ) {
                         // содержимое приложения
-                        TestMovieScreen()
+                        // TestMovieScreen()
 
                         // TestMovieResponseScreen()
+
+                        SearchScreen()
                     }
                 }
             )
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TestMovieScreen(
-    vm: MovieFinderApiViewModel = viewModel()
+    vm: TestViewModel = viewModel()
 ) {
     val state by vm.state
 
@@ -65,7 +65,7 @@ fun TestMovieScreen(
 
 @Composable
 fun TestMovieResponseScreen(
-    vm: MovieFinderApiViewModel = viewModel()
+    vm: TestViewModel = viewModel()
 ) {
     val state by vm.state
 
