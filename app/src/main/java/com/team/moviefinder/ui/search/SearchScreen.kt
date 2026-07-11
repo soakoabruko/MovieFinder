@@ -2,61 +2,40 @@ package com.team.moviefinder.ui.search
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import com.team.moviefinder.data.models.MovieSearchItemResponse
-import com.team.moviefinder.ui.navigation.BottomNavBar
-// иконки material design
+import androidx.compose.foundation.text.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-
-// работа с состоянием и жизненным циклом
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-
-// текст и шрифты
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
-// навигация
+import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-
-// загрузка изображений
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import androidx.compose.material.icons.filled.ArrowForward
+import com.team.moviefinder.data.models.MovieSearchItemResponse
+import com.team.moviefinder.ui.navigation.BottomNavBar
 import com.team.moviefinder.ui.theme.LightBlue
-
-/**
- * Экран поиска фильмов
- *
- * Архитектура: MVVM (Model-View-ViewModel)
- * - View: SearchScreen (UI)
- * - ViewModel: SearchViewModel (логика и состояния)
- * - Model: MovieSearchResponse (данные из API)
- *
- * Использует Material 3 дизайн с поддержкой светлой и темной темы
- */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     navController: NavController,
+    onNavigateBack: () -> Unit,
+    onNavigateToDetails: (Int) -> Unit,
     vm: SearchViewModel = viewModel(),
 ) {
     var query by remember { mutableStateOf("") }
     val uiState by vm.uiState.collectAsState()
+
     val colorScheme = MaterialTheme.colorScheme
 
     Scaffold(
@@ -65,63 +44,64 @@ fun SearchScreen(
                 title = {
                     Text(
                         text = "Что ты хочешь посмотреть?",
-                        color = colorScheme.onSurface,  // цвет из темы
+                        color = colorScheme.onSurface,
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
-                // кнопка "Назад" для возврата на предыдущий экран
                 navigationIcon = {
-                    IconButton(onClick = { /* navController.navigateUp() */ }) {
+                    IconButton(
+                        onClick = onNavigateBack,
+                    ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Назад",
-                            tint = colorScheme.onSurface,  // цвет из темы
+                            tint = colorScheme.onSurface,
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = colorScheme.surface,  // цвет из темы
+                    containerColor = colorScheme.surface,
                 ),
             )
         },
-        // панель навигации
-        bottomBar = {
-            BottomNavBar(navController = navController)
-        },
+        bottomBar = { BottomNavBar(navController) },
         content = { padding: PaddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .padding(vertical = 16.dp)
+                ,
             ) {
-                // поле ввода
                 OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                        .padding(horizontal = 24.dp)
+                    ,
                     placeholder = {
                         Text(
                             text = "Поиск",
-                            color = colorScheme.onSurface.copy(alpha = 0.6f),  // цвет из темы
+                            color = colorScheme.onSurface.copy(alpha = 0.6f),
                         )
                     },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    // поиск при нажатии enter на клавиатуре
                     keyboardActions = KeyboardActions(onSearch = { vm.searchMovies(query) }),
                     singleLine = true,
                     shape = RoundedCornerShape(16.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = colorScheme.surfaceVariant,   // цвет из темы
-                        unfocusedContainerColor = colorScheme.surfaceVariant, // цвет из темы
+                        focusedContainerColor = colorScheme.surfaceVariant,
+                        unfocusedContainerColor = colorScheme.surfaceVariant,
+
                         focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
+
                         focusedPlaceholderColor = colorScheme.onSurface.copy(alpha = 0.6f),
                         unfocusedPlaceholderColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                        focusedTextColor = colorScheme.onSurface,  // цвет из темы
-                        unfocusedTextColor = colorScheme.onSurface, // цвет из темы
+
+                        focusedTextColor = colorScheme.onSurface,
+                        unfocusedTextColor = colorScheme.onSurface,
                     ),
                     trailingIcon = {
                         Row {
@@ -150,7 +130,6 @@ fun SearchScreen(
 
                 Box(modifier = Modifier.weight(1f)) {
                     when (val currentState = uiState) {
-                        // состояние "Загрузка"
                         is SearchUiState.Loading -> {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -160,7 +139,6 @@ fun SearchScreen(
                             }
                         }
 
-                        // состояние "Успех"
                         is SearchUiState.Success -> {
                             val total = currentState.totalFilms
                             val films = currentState.allFilms
@@ -168,14 +146,13 @@ fun SearchScreen(
                             val isMoreAvailable = films.size < total
 
                             Column {
-                                // кол-во найденных фильмов
                                 Text(
                                     text = "Найдено: $total фильмов",
                                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
                                     color = colorScheme.onSurface.copy(alpha = 0.6f),
                                     fontSize = 14.sp,
                                 )
-                                // список фильмов
+
                                 LazyColumn(
                                     modifier = Modifier.fillMaxSize(),
                                     verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -183,11 +160,10 @@ fun SearchScreen(
                                     items(films) { movie ->
                                         MovieCard(
                                             movie = movie,
-                                            onClick = {},
+                                            navigateToDetails = { onNavigateToDetails(movie.filmId) },
                                         )
                                     }
 
-                                    // кнопка "Загрузить ещё"
                                     if (isMoreAvailable) {
                                         item {
                                             Button(
@@ -205,7 +181,6 @@ fun SearchScreen(
                                         }
                                     }
 
-                                    // конец
                                     if (!isMoreAvailable) {
                                         item {
                                             Text(
@@ -223,7 +198,6 @@ fun SearchScreen(
                             }
                         }
 
-                        // состояние "Ошибка"
                         is SearchUiState.Error -> {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -236,7 +210,6 @@ fun SearchScreen(
                             }
                         }
 
-                        // состояние "Пустой результат"
                         is SearchUiState.Empty -> {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -249,7 +222,6 @@ fun SearchScreen(
                             }
                         }
 
-                        // состояние "Ожидание ввода"
                         is SearchUiState.Idle -> {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -268,39 +240,28 @@ fun SearchScreen(
     )
 }
 
-/**
- * Карточка с информацией о фильме
- *
- * Отображает:
- * - Постер фильма
- * - Название (русское и английское)
- * - Рейтинг (со звездочкой)
- * - Стрелку для перехода к деталям
- *
- * @param movie Данные фильма из API
- * @param onClick Колбэк при клике на карточку
- */
 @Composable
 fun MovieCard(
     movie: MovieSearchItemResponse,
-    onClick: () -> Unit,
+    navigateToDetails: () -> Unit,
 ) {
     val displayTitle = movie.nameRu ?: movie.nameEn ?: "Без названия"
-    val colorScheme = MaterialTheme.colorScheme
 
-    // карточка
+    val colorScheme = MaterialTheme.colorScheme
+    val typography = MaterialTheme.typography
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
-            .clickable { onClick() },
+            .clickable { navigateToDetails() }
+        ,
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorScheme.surface  // цвет из темы
+            containerColor = colorScheme.surface
         )
     ) {
-        // содержимое
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -308,7 +269,6 @@ fun MovieCard(
             ,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // постер
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(movie.posterUrl)
@@ -325,12 +285,11 @@ fun MovieCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // информация
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = displayTitle,
-                    color = colorScheme.onSurface,  // цвет из темы
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    color = colorScheme.onSurface,
+                    fontSize = typography.titleMedium.fontSize,
                     fontWeight = FontWeight.Bold,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                     maxLines = 1,
@@ -340,13 +299,12 @@ fun MovieCard(
                     Text(
                         text = movie.nameEn,
                         color = colorScheme.onSurface.copy(alpha = 0.6f),
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                        fontSize = typography.bodySmall.fontSize,
                     )
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // рейтинг
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Star,
@@ -360,7 +318,7 @@ fun MovieCard(
                     Text(
                         text = if (movie.rating == "null") "Нет рейтинга" else movie.rating,
                         color = colorScheme.onSurface.copy(alpha = 0.6f),
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                        fontSize = typography.bodySmall.fontSize,
                     )
                 }
             }

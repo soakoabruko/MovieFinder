@@ -7,17 +7,20 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import com.team.moviefinder.ui.theme.LightBlue
+import androidx.navigation.NavController
+import com.team.moviefinder.ui.navigation.BottomNavBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    navController: NavController,
+    onNavigateBack: () -> Unit,
+) {
     val context = LocalContext.current
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -35,7 +38,7 @@ fun SettingsScreen() {
                 },
 
                 navigationIcon = {
-                    IconButton(onClick = { /* navController.navigateUp() */ }) {
+                    IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Назад",
@@ -50,79 +53,7 @@ fun SettingsScreen() {
             )
         },
 
-        bottomBar = {
-            NavigationBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(78.dp),
-                containerColor = colorScheme.surface,
-                tonalElevation = 0.dp,
-                content = {
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Home,
-                                contentDescription = "Главная",
-                            )
-                        },
-                        label = {
-                            Text("Главная")
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = LightBlue,
-                            selectedTextColor = LightBlue,
-                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            indicatorColor = Color.Transparent
-                        ),
-                    )
-
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Поиск"
-                            )
-                        },
-                        label = {
-                            Text("Поиск")
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = LightBlue,
-                            selectedTextColor = LightBlue,
-                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            indicatorColor = Color.Transparent
-                        ),
-                    )
-
-                    NavigationBarItem(
-                        selected = true,
-                        onClick = {},
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Settings,
-                                contentDescription = "Настройки"
-                            )
-                        },
-                        label = {
-                            Text("Настройки")
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = LightBlue,
-                            selectedTextColor = LightBlue,
-                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            indicatorColor = Color.Transparent
-                        ),
-                    )
-                }
-            )
-        },
+        bottomBar = { BottomNavBar(navController) },
 
         content = { padding: PaddingValues ->
             Column(
