@@ -2,44 +2,32 @@ package com.team.moviefinder
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.activity.compose.setContent
+import com.team.moviefinder.ui.theme.MovieFinderTheme
 import androidx.compose.runtime.Composable
 import com.team.moviefinder.data.repository.MovieFinderApiViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Text
+import com.team.moviefinder.ui.home.HomeScreen
+import com.team.moviefinder.ui.settings.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Scaffold(
-                // расположение под status bar-ом
-                content = { padding: PaddingValues ->
-                    Column(
-                        modifier = Modifier
-                            .background(Color.DarkGray)
-                            .fillMaxSize()
-                            .padding(padding),
-                    ) {
-                        // содержимое приложения
-                        TestMovieScreen()
+            MovieFinderTheme {
+                //TestMovieScreen()
 
-                        // TestMovieResponseScreen()
-                    }
-                }
-            )
+                // TestMovieResponseScreen()
+
+                HomeScreen()
+
+                // SettingsScreen()
+            }
         }
     }
 }
