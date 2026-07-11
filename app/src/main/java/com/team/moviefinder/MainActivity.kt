@@ -1,18 +1,17 @@
 package com.team.moviefinder
 
 import androidx.activity.ComponentActivity
-import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
 import com.team.moviefinder.ui.theme.MovieFinderTheme
-import com.team.moviefinder.ui.details.DetailsScreen
 import androidx.compose.runtime.Composable
 import com.team.moviefinder.data.repository.TestViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Text
-import com.team.moviefinder.ui.search.SearchScreen
+import com.team.moviefinder.ui.home.HomeScreen
+import com.team.moviefinder.ui.settings.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,12 +19,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieFinderTheme {
-                // содержимое приложения
-                // TestMovieScreen()
+                //TestMovieScreen()
 
                 // TestMovieResponseScreen()
 
-                DetailsScreen(301)
+                HomeScreen()
+
+                // SettingsScreen()
             }
         }
     }
