@@ -9,7 +9,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import com.team.moviefinder.data.models.MovieSearchItemResponse
-
+import com.team.moviefinder.ui.navigation.BottomNavBar
 // иконки material design
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -52,7 +52,7 @@ import com.team.moviefinder.ui.theme.LightBlue
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    // navController: NavController,
+    navController: NavController,
     vm: SearchViewModel = viewModel(),
 ) {
     var query by remember { mutableStateOf("") }
@@ -84,78 +84,9 @@ fun SearchScreen(
                 ),
             )
         },
+        // панель навигации
         bottomBar = {
-            NavigationBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(78.dp),
-                containerColor = colorScheme.surface,  // цвет из темы
-                tonalElevation = 0.dp,
-                content = {
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Home,
-                                contentDescription = "Главная",
-                            )
-                        },
-                        label = {
-                            Text("Главная")
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = LightBlue,
-                            selectedTextColor = LightBlue,
-                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            indicatorColor = Color.Transparent
-                        )
-                    )
-
-                    NavigationBarItem(
-                        selected = true,
-                        onClick = {},
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Поиск"
-                            )
-                        },
-                        label = {
-                            Text("Поиск")
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = LightBlue,
-                            selectedTextColor = LightBlue,
-                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            indicatorColor = Color.Transparent
-                        )
-                    )
-
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = {},
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Settings,
-                                contentDescription = "Настройки"
-                            )
-                        },
-                        label = {
-                            Text("Настройки")
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = LightBlue,
-                            selectedTextColor = LightBlue,
-                            unselectedIconColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            unselectedTextColor = colorScheme.onSurface.copy(alpha = 0.6f),
-                            indicatorColor = Color.Transparent
-                        )
-                    )
-                }
-            )
+            BottomNavBar(navController = navController)
         },
         content = { padding: PaddingValues ->
             Column(
