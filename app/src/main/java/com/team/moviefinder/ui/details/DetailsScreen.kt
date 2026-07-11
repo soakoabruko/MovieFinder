@@ -3,34 +3,33 @@ package com.team.moviefinder.ui.details
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.team.moviefinder.R
 import com.team.moviefinder.data.models.MovieDetailsResponse
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
-import coil.request.ImageRequest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
     id: Int,
+    onNavigateBack: () -> Unit,
     vm: DetailsViewModel = viewModel(),
 ) {
     val uiState by vm.uiState.collectAsState()
+
     val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(id) {
@@ -49,7 +48,7 @@ fun DetailsScreen(
                 },
 
                 navigationIcon = {
-                    IconButton(onClick = { /* navController.navigateUp() */ }) {
+                    IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Назад",
@@ -97,7 +96,9 @@ fun DetailsScreen(
 @Composable
 fun MovieDetailsContent(movie: MovieDetailsResponse) {
     val displayTitle = movie.nameRu ?: movie.nameEn ?: stringResource(R.string.untitled_movie)
+
     val colorScheme = MaterialTheme.colorScheme
+    val typography = MaterialTheme.typography
 
     Column(
         modifier = Modifier
@@ -125,7 +126,7 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
             text = displayTitle,
             color = colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineLarge,
+            style = typography.headlineLarge,
         )
 
         if (!movie.nameEn.isNullOrBlank() && !movie.nameRu.isNullOrBlank()) {
@@ -133,7 +134,7 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
                 text = movie.nameEn,
                 color = colorScheme.onSurface.copy(alpha = 0.6f),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineMedium,
+                style = typography.headlineMedium,
             )
         }
 
@@ -152,7 +153,7 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
             Text(
                 text = if (movie.rating == null) stringResource(R.string.no_rating) else movie.rating.toString(),
                 color = colorScheme.onSurface.copy(alpha = 0.6f),
-                style = MaterialTheme.typography.labelLarge,
+                style = typography.labelLarge,
             )
         }
 
@@ -160,7 +161,7 @@ fun MovieDetailsContent(movie: MovieDetailsResponse) {
 
         Text(
             text = movie.description ?: stringResource(R.string.no_description),
-            style = MaterialTheme.typography.bodyLarge,
+            style = typography.bodyLarge,
         )
     }
 }

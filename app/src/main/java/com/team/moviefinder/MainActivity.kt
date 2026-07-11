@@ -1,17 +1,15 @@
 package com.team.moviefinder
 
+import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
-import com.team.moviefinder.ui.theme.MovieFinderTheme
-import androidx.compose.runtime.Composable
-import com.team.moviefinder.data.repository.TestViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.LaunchedEffect
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
-import com.team.moviefinder.ui.home.HomeScreen
-import com.team.moviefinder.ui.settings.SettingsScreen
+import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.team.moviefinder.data.repository.TestViewModel
+import com.team.moviefinder.ui.navigation.AppNavGraph
+import com.team.moviefinder.ui.theme.MovieFinderTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,13 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieFinderTheme {
-                //TestMovieScreen()
-
-                // TestMovieResponseScreen()
-
-                HomeScreen()
-
-                // SettingsScreen()
+                AppNavGraph()
             }
         }
     }
