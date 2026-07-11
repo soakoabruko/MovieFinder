@@ -1,12 +1,11 @@
 package com.team.moviefinder
 
-import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
 import com.team.moviefinder.ui.theme.MovieFinderTheme
 import androidx.compose.runtime.Composable
-import com.team.moviefinder.data.repository.MovieFinderApiViewModel
+import com.team.moviefinder.data.repository.TestViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TestMovieScreen(
-    vm: MovieFinderApiViewModel = viewModel()
+    vm: TestViewModel = viewModel()
 ) {
     val state by vm.state
 
@@ -53,7 +52,7 @@ fun TestMovieScreen(
 
 @Composable
 fun TestMovieResponseScreen(
-    vm: MovieFinderApiViewModel = viewModel()
+    vm: TestViewModel = viewModel()
 ) {
     val state by vm.state
 
