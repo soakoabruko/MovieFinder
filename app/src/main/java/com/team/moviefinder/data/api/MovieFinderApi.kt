@@ -1,10 +1,10 @@
 package com.team.moviefinder.data.api
 
+import com.team.moviefinder.data.models.MovieDetailsResponse
+import com.team.moviefinder.data.models.MovieSearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
-import com.team.moviefinder.data.models.MovieDetailsResponse
 import retrofit2.http.Query
-import com.team.moviefinder.data.models.MovieSearchResponse
 
 interface MovieFinderApi {
     @GET("/api/v2.2/films/{id}")

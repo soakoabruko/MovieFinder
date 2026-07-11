@@ -1,13 +1,13 @@
 package com.team.moviefinder.ui.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.team.moviefinder.data.models.MovieSearchItemResponse
+import com.team.moviefinder.data.repository.MovieFinderApiRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.team.moviefinder.data.models.MovieSearchItemResponse
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import com.team.moviefinder.data.repository.MovieFinderApiRepository
 
 // ViewModel для экрана поиска
 class SearchViewModel: ViewModel() {

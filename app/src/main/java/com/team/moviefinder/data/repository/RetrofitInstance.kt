@@ -1,8 +1,8 @@
 package com.team.moviefinder.data.repository
 
 import com.team.moviefinder.BuildConfig
-import okhttp3.OkHttpClient
 import com.team.moviefinder.data.api.MovieFinderApi
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

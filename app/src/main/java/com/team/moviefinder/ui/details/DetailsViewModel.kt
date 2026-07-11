@@ -1,12 +1,9 @@
 package com.team.moviefinder.ui.details
 
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import androidx.lifecycle.*
 import com.team.moviefinder.data.repository.MovieFinderApiRepository
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class DetailsViewModel : ViewModel() {
 
