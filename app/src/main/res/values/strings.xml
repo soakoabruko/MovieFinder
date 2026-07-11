@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MovieFinder</string>
+    <string name="details_title">Детали фильма</string>
+    <string name="untitled_movie">Без названия</string>
+    <string name="no_rating">Нет рейтинга</string>
+    <string name="no_description">Нет описания</string>
 </resources>
