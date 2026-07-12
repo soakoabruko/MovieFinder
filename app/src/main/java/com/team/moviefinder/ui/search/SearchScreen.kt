@@ -1,5 +1,6 @@
 package com.team.moviefinder.ui.search
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +35,7 @@ fun SearchScreen(
     onNavigateToDetails: (Int) -> Unit,
     vm: SearchViewModel = viewModel(),
 ) {
-    var query by remember { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf("") }
     val uiState by vm.uiState.collectAsState()
 
     val colorScheme = MaterialTheme.colorScheme
@@ -143,8 +145,6 @@ fun SearchScreen(
                             val total = currentState.totalFilms
                             val films = currentState.allFilms
 
-                            val isMoreAvailable = films.size < total
-
                             Column {
                                 Text(
                                     text = "Найдено: $total фильмов",
@@ -164,8 +164,10 @@ fun SearchScreen(
                                         )
                                     }
 
-                                    if (isMoreAvailable) {
-                                        item {
+                                    item {
+                                        Log.d("!!!", "${films.size} $total")
+
+                                        if (films.size < total) {
                                             Button(
                                                 onClick = { vm.loadMore() },
                                                 modifier = Modifier
@@ -178,11 +180,7 @@ fun SearchScreen(
                                             ) {
                                                 Text("Загрузить ещё")
                                             }
-                                        }
-                                    }
-
-                                    if (!isMoreAvailable) {
-                                        item {
+                                        } else {
                                             Text(
                                                 text = "Все фильмы загружены",
                                                 modifier = Modifier

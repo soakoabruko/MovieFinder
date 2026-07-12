@@ -28,9 +28,11 @@ fun BottomNavBar(navController: NavController) {
             selected = route == "home",
             onClick = {
                 navController.navigate("home") {
-                    popUpTo(0) {
+                    popUpTo("home") {
                         saveState = true
                     }
+
+                    launchSingleTop = true
                 }
             },
             icon = {
@@ -57,8 +59,10 @@ fun BottomNavBar(navController: NavController) {
             selected = route == "search",
             onClick = {
                 navController.navigate("search") {
-                    restoreState = true
+                    popUpTo("search")
+
                     launchSingleTop = true
+                    restoreState = true
                 }
             },
             icon = {
@@ -85,7 +89,10 @@ fun BottomNavBar(navController: NavController) {
             selected = route == "settings",
             onClick = {
                 navController.navigate("settings") {
-                    restoreState = true
+                    popUpTo("settings") {
+                        saveState = true
+                    }
+
                     launchSingleTop = true
                 }
             },
